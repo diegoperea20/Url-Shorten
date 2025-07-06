@@ -1,54 +1,174 @@
-# Url Shorten
+# URL Shortener
 
-Nextjs Url Shorten 
+A modern, fast, and user-friendly URL shortener built with Next.js 14. Transform your long URLs into compact, shareable links instantly.
 
-<p align="center">
-  <img src="README-images/homeurl.PNG" alt="Step1">
-</p>
+![URL Shortener](https://img.shields.io/badge/Next.js-14.2.4-black?style=for-the-badge&logo=next.js)
+![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge&logo=react)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-<p align="center">
-  <img src="README-images/step2.PNG" alt="Step1">
-</p>
+## ✨ Features
 
-<p align="center">
-  <img src="README-images/urlshorten.PNG" alt="Step1">
-</p>
+- **🚀 Fast & Modern**: Built with Next.js 14 and React 18
+- **📱 Responsive Design**: Works perfectly on desktop, tablet, and mobile
+- **🎨 Beautiful UI**: Modern glassmorphism design with smooth animations
+- **🔗 Instant Shortening**: Create short URLs in seconds
+- **📋 Copy to Clipboard**: One-click copy functionality
+- **✅ URL Validation**: Ensures only valid URLs are processed
+- **🔄 Real-time Feedback**: Loading states and error handling
+- **🌐 SEO Optimized**: Proper meta tags and Open Graph support
+- **♿ Accessibility**: WCAG compliant with proper ARIA labels
 
------
+## 🛠️ Tech Stack
 
-Fronted Nextjs Options for do it:
+- **Frontend**: Next.js 14, React 18, CSS3
+- **Icons**: React Icons
+- **Styling**: Custom CSS with Glassmorphism effects
+- **Deployment**: Vercel-ready
 
+## 🚀 Getting Started
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+### Prerequisites
 
-## Getting Started
-Nodejs version v20.10.0 and Next.js version v14.2.3 
+- Node.js 18.0.0 or higher
+- npm 8.0.0 or higher
 
-First
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/diegoperea20/Url-Shorten.git
+   cd Url-Shorten
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Run the development server**
+
+   ```bash
+   npm run dev
+   ```
+
+4. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+### Building for Production
+
 ```bash
-npm install
+# Build the application
+npm run build
+
+# Start the production server
+npm start
 ```
-run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 📁 Project Structure
+
+```
+Url-Shorten/
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   └── shorten/
+│   │   │       └── route.js          # API endpoints
+│   │   ├── globals.css               # Global styles
+│   │   ├── layout.js                 # Root layout
+│   │   └── page.js                   # Main page component
+│   └── components/
+│       ├── Footer.jsx                # Footer component
+│       └── footer.css                # Footer styles
+├── public/
+│   └── icon.ico                      # App icon
+├── package.json
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔧 API Endpoints
 
-## Resolve : Error Nextjs Parsing error: Cannot find module 'next/babel'
+### POST `/api/shorten`
 
-Put this code in .eslintrc.json 
-```bash
+Creates a shortened URL.
+
+**Request Body:**
+
+```json
 {
-  "extends": ["next/babel","next/core-web-vitals"]
+  "url": "https://example.com/very-long-url"
 }
 ```
 
-Created by [Diego Ivan Perea Montealegre](https://github.com/diegoperea20)
+**Response:**
+
+```json
+{
+  "shortCode": "abc123",
+  "originalUrl": "https://example.com/very-long-url",
+  "message": "URL shortened successfully"
+}
+```
+
+### GET `/api/shorten?shortCode=abc123`
+
+Retrieves the original URL for a short code.
+
+**Response:**
+
+```json
+{
+  "url": "https://example.com/very-long-url",
+  "shortCode": "abc123"
+}
+```
+
+## 🎨 Customization
+
+### Styling
+
+The application uses custom CSS with modern design principles. You can customize the appearance by modifying:
+
+- `src/app/globals.css` - Main styles
+- `src/components/footer.css` - Footer styles
+
+### Configuration
+
+Update the metadata in `src/app/layout.js` to customize:
+
+- Page title and description
+- Open Graph tags
+- Favicon
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Connect your repository to Vercel
+3. Deploy automatically
+
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Diego Ivan Perea Montealegre**
+
+- GitHub: [@diegoperea20](https://github.com/diegoperea20)
+- LinkedIn: [Diego Ivan Perea Montealegre](https://www.linkedin.com/in/diego-perea-montealegre)
+  
+---
+
+⭐ If you found this project helpful, please give it a star on GitHub!

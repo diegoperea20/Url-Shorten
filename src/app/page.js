@@ -1,17 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { FaRegCopy, FaCheck } from 'react-icons/fa';
-import Link from 'next/link';
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FaRegCopy, FaCheck, FaLink, FaGithub } from "react-icons/fa";
+import Link from "next/link";
 
-export default function URLShortener() {
-  const [longUrl, setLongUrl] = useState('');
-  const [shortUrl, setShortUrl] = useState('');
+function URLShortenerContent() {
+  const [longUrl, setLongUrl] = useState("");
+  const [shortUrl, setShortUrl] = useState("");
   const [isCopied, setIsCopied] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const shortCode = searchParams.get('shortCode');
+  const shortCode = searchParams.get("shortCode");
 
   useEffect(() => {
     if (shortCode) {
@@ -23,77 +25,168 @@ export default function URLShortener() {
     try {
       const response = await fetch(`/api/shorten?shortCode=${code}`);
       if (!response.ok) {
-        throw new Error('URL not found');
+        throw new Error("URL not found");
       }
       const data = await response.json();
       window.location.href = data.url;
     } catch (error) {
-      console.error('Error:', error);
-      router.push('/');
+      console.error("Error:", error);
+      router.push("/");
+    }
+  };
+
+  const validateUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
     }
   };
 
   const handleShorten = async () => {
-    if (!longUrl) {
-      alert('Please enter a URL');
+    setError("");
+    if (!longUrl.trim()) {
+      setError("Please enter a URL");
       return;
     }
+
+    if (!validateUrl(longUrl)) {
+      setError("Please enter a valid URL (e.g., https://example.com)");
+      return;
+    }
+
+    setIsLoading(true);
     try {
-      const response = await fetch('/api/shorten', {
-        method: 'POST',
+      const response = await fetch("/api/shorten", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ url: longUrl }),
       });
+
       if (!response.ok) {
-        throw new Error('Error al acortar la URL');
+        throw new Error("Error shortening URL");
       }
+
       const data = await response.json();
-      setShortUrl(`${window.location.origin}?shortCode=${data.shortCode}`);
+      const fullShortUrl = `${window.location.origin}?shortCode=${data.shortCode}`;
+      setShortUrl(fullShortUrl);
     } catch (error) {
-      console.error('Error:', error);
-      alert('Hubo un error al acortar la URL');
+      console.error("Error:", error);
+      setError("There was an error shortening the URL. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(shortUrl);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 3000);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(shortUrl);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 3000);
+    } catch (error) {
+      console.error("Failed to copy:", error);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleShorten();
+    }
   };
 
   if (shortCode) {
-    return <div>Redirecting...</div>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Redirecting...</p>
+      </div>
+    );
   }
 
   return (
-    <div className="url-shortener">
-      <input
-        type="text"
-        value={longUrl}
-        onChange={(e) => setLongUrl(e.target.value)}
-        placeholder="Enter the URL"
-      />
-      <button onClick={handleShorten}>Shorten</button>
-      
-      {shortUrl && (
-        <div className="result">
-          <a href={shortUrl} target="_blank" rel="noopener noreferrer" className="shortened-url">
-            {shortUrl}
-          </a>
-          <button onClick={handleCopy}>
-            {isCopied ? <FaCheck /> : <FaRegCopy /> }
-          </button>
+    <div className="container">
+      <div className="main-content">
+        <div className="header">
+          <FaLink className="header-icon" />
+          <h1>URL Shortener</h1>
+          <p>Shorten your long URLs into compact, shareable links</p>
         </div>
-      )}
 
-<div className="project-github">
-      <p>This project is in </p>
-      <Link href="https://github.com/diegoperea20/Url-Shorten">
-        <img width="96" height="96" src="https://img.icons8.com/fluency/96/github.png" alt="github"/>
-      </Link>
+        <div className="url-shortener">
+          <div className="input-group">
+            <input
+              type="text"
+              value={longUrl}
+              onChange={(e) => setLongUrl(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Enter your long URL here..."
+              className="url-input"
+              disabled={isLoading}
+            />
+            <button
+              onClick={handleShorten}
+              className="shorten-btn"
+              disabled={isLoading}
+            >
+              {isLoading ? "Shortening..." : "Shorten URL"}
+            </button>
+          </div>
+
+          {error && <div className="error-message">{error}</div>}
+
+          {shortUrl && (
+            <div className="result">
+              <div className="result-header">
+                <h3>Your shortened URL:</h3>
+              </div>
+              <div className="shortened-url-container">
+                <a
+                  href={shortUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shortened-url"
+                >
+                  {shortUrl}
+                </a>
+                <button onClick={handleCopy} className="copy-btn">
+                  {isCopied ? <FaCheck /> : <FaRegCopy />}
+                </button>
+              </div>
+              {isCopied && (
+                <div className="copy-feedback">URL copied to clipboard!</div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="project-github">
+          <p>This project is on GitHub</p>
+          <Link
+            href="https://github.com/diegoperea20/Url-Shorten"
+            target="_blank"
+          >
+            <FaGithub className="github-icon" />
+          </Link>
+        </div>
+      </div>
     </div>
-    </div>
+  );
+}
+
+export default function URLShortener() {
+  return (
+    <Suspense
+      fallback={
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading...</p>
+        </div>
+      }
+    >
+      <URLShortenerContent />
+    </Suspense>
   );
 }

@@ -1,12 +1,16 @@
 {
-  "name": "nextjslinks",
-  "version": "0.1.0",
+  "name": "url-shortener",
+  "version": "1.0.0",
   "private": true,
+  "description": "A modern URL shortener built with Next.js",
+  "author": "Diego Ivan Perea Montealegre",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix"
   },
   "dependencies": {
     "next": "14.2.4",
@@ -17,5 +21,24 @@
   "devDependencies": {
     "eslint": "^8",
     "eslint-config-next": "14.2.4"
-  }
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "keywords": [
+    "url-shortener",
+    "nextjs",
+    "react",
+    "link-shortener",
+    "url-compression"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/diegoperea20/Url-Shorten.git"
+  },
+  "bugs": {
+    "url": "https://github.com/diegoperea20/Url-Shorten/issues"
+  },
+  "homepage": "https://github.com/diegoperea20/Url-Shorten#readme"
 }
