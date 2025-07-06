@@ -1,5 +1,11 @@
 # URL Shortener
 
+<p align="center">
+  <img src="README-images/home.png" alt="Home">
+  <br>
+  <em>Home</em>
+</p>
+
 A modern, fast, and user-friendly URL shortener built with Next.js 14. Transform your long URLs into compact, shareable links instantly.
 
 ![URL Shortener](https://img.shields.io/badge/Next.js-14.2.4-black?style=for-the-badge&logo=next.js)
